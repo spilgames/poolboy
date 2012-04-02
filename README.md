@@ -1,3 +1,15 @@
+Spilgames
+==========
+Maintainer: Bart van Deenen
+
+last merged with external library: april 2nd 2012.
+
+## Tags
+Uses same tags as origin (devinus/poolboy)
+
+* 0.6.1  (april 2012). 
+
+
 Poolboy - A hunky Erlang worker pool factory
 ============================================
 

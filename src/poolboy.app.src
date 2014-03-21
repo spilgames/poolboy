@@ -1,6 +1,7 @@
-{application,poolboy,
-             [{description,"A hunky Erlang worker pool factory"},
-              {vsn,git},
-              {applications,[kernel,stdlib]},
-              {registered,[poolboy]}
+{application, poolboy, [
+    {description, "A hunky Erlang worker pool factory"},
+    {vsn, git},
+%    {vsn, {cmd, "echo `cat VERSION`"}},
+    {applications, [kernel, stdlib]},
+    {registered, [poolboy]}
 ]}.

@@ -13,7 +13,12 @@ Uses same tags as origin (devinus/poolboy)
 Poolboy - A hunky Erlang worker pool factory
 ============================================
 
-[![Build Status](https://secure.travis-ci.org/devinus/poolboy.png?branch=master)](http://travis-ci.org/devinus/poolboy)
+[![Build Status](https://api.travis-ci.org/devinus/poolboy.svg?branch=master)](https://travis-ci.org/devinus/poolboy)
+
+[![Support via Gratipay](https://raw.githubusercontent.com/twolfson/gittip-badge/0.2.1/dist/gittip.png)](https://gratipay.com/devinus/)
+
+Poolboy is a **lightweight**, **generic** pooling library for Erlang with a
+focus on **simplicity**, **performance**, and **rock-solid** disaster recovery.
 
 ## Usage
 
@@ -178,4 +183,3 @@ meant especially for jurisdictions that do not recognize public domain works.
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/devinus/poolboy/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-

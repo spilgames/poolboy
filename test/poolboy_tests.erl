@@ -50,6 +50,12 @@ pool_test_() ->
             },
             {<<"Pool returns status">>,
                 fun pool_returns_status/0
+            },
+            {<<"Pool demonitors previously waiting processes">>,
+                fun demonitors_previously_waiting_processes/0
+            },
+            {<<"Pool demonitors when a checkout is cancelled">>,
+                fun demonitors_when_checkout_cancelled/0
             }
         ]
     }.
@@ -391,6 +397,44 @@ pool_returns_status() ->
     {ok, Pool4} = new_pool(0, 0),
     ?assertEqual({full, 0, 0, 0}, poolboy:status(Pool4)),
     ok = pool_call(Pool4, stop).
+
+demonitors_previously_waiting_processes() ->
+    {ok, Pool} = new_pool(1,0),
+    Self = self(),
+    Pid = spawn(fun() ->
+        W = poolboy:checkout(Pool),
+        Self ! ok,
+        timer:sleep(500),
+        poolboy:checkin(Pool, W),
+        receive ok -> ok end
+    end),
+    receive ok -> ok end,
+    Worker = poolboy:checkout(Pool),
+    ?assertEqual(1, length(get_monitors(Pool))),
+    poolboy:checkin(Pool, Worker),
+    timer:sleep(500),
+    ?assertEqual(0, length(get_monitors(Pool))),
+    Pid ! ok,
+    ok = pool_call(Pool, stop).
+
+demonitors_when_checkout_cancelled() ->
+    {ok, Pool} = new_pool(1,0),
+    Pid = spawn(fun() ->
+        poolboy:checkout(Pool),
+        poolboy:checkout(Pool),
+        receive ok -> ok end
+    end),
+    timer:sleep(500),
+    ?assertEqual(2, length(get_monitors(Pool))),
+    gen_server:cast(Pool, {cancel_waiting, Pid}),
+    timer:sleep(500),
+    ?assertEqual(1, length(get_monitors(Pool))),
+    Pid ! ok,
+    ok = pool_call(Pool, stop).
+
+get_monitors(Pid) ->
+    [{monitors, Monitors}] = erlang:process_info(Pid, [monitors]),
+    Monitors.
 
 new_pool(Size, MaxOverflow) ->
     poolboy:start_link([{name, {local, poolboy_test}},
